@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ThreadLoggerDemo": {
+      "commandName": "Project",
+      "commandLineArgs": "c:\\junk"
+    }
+  }
+}
