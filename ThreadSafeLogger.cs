@@ -5,20 +5,20 @@
     /// </summary>
     internal class ThreadSafeLogger
     {
-        private const string LOG_FILENAME = "out.txt";
-        private string _logFilePath = "log";
+        private string _logFilePath = string.Empty;
         private readonly object _fileLock = new object();
         private int _lineCount = 0;
 
 
         /// <summary>
-        /// This method creates log file and writes an initial entry to it 
         /// </summary>
+        /// <param name="initialEntry">Initial entry that is written when the log file is created</param>
         /// <param name="logfilePath">Path to the log file</param>
-        /// <param name="initialEntry">Initial entry to log file</param>
-        internal void CreateLogFile(string logfilePath, string initialEntry)
+        internal ThreadSafeLogger(string logfilePath, string initialEntry)
         {
-            _logFilePath = Path.Combine(logfilePath, _logFilePath, LOG_FILENAME);
+            // save the filepath and write the initial entry to the log file.
+            _logFilePath = logfilePath;
+            Console.WriteLine($"Creating log file with initial entry at {Path.GetFullPath(logfilePath)}");
             File.WriteAllText(_logFilePath, $"{_lineCount}, {initialEntry}, {DateTime.Now:HH:mm:ss.fff}{Environment.NewLine}");
         }
 

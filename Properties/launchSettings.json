@@ -3,6 +3,9 @@
     "ThreadLoggerDemo": {
       "commandName": "Project",
       "commandLineArgs": "c:\\junk"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
     }
   }
 }

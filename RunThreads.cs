@@ -2,26 +2,21 @@
 
 namespace ThreadLoggerDemo
 {
+    /// <summary>
+    /// The main class for the Thread Logger Demo
+    /// </summary>
     internal class RunThreads
     {
-        ThreadSafeLogger _threadSafeLogger = new ThreadSafeLogger();
+        ThreadSafeLogger? _threadSafeLogger;
 
-        readonly string _logFilePath;
+        const string LOGFILE_PATH = "/log/out.txt";
         Thread[] _threads = new Thread[10];
         bool _stopAllThreads = false;
 
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="logfilePath"></param>
-        internal RunThreads(string logfilePath)
-        {
-            _logFilePath = logfilePath;
-        }
-
-        /// <summary>
-        /// 
+        /// Constructor for class
+        /// Creates the log directory if does not exist and writes the initial entry to the log.
         /// </summary>
         internal void RunDemo()
         {
@@ -29,11 +24,14 @@ namespace ThreadLoggerDemo
             var initialEntry = $"0";
             try
             {
-                _threadSafeLogger.CreateLogFile(_logFilePath, initialEntry);
+                var path = Path.GetDirectoryName(LOGFILE_PATH);
+                Console.WriteLine($"Creating log directory at {path}");
+                Directory.CreateDirectory(path);
+                _threadSafeLogger = new ThreadSafeLogger(LOGFILE_PATH, initialEntry);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Cannot create log file({_logFilePath}){Environment.NewLine}{ex.Message}");
+                Console.WriteLine($"Cannot create log file({LOGFILE_PATH}){Environment.NewLine}{ex.Message}");
                 return;
             }
 
@@ -56,7 +54,7 @@ namespace ThreadLoggerDemo
         }
 
         /// <summary>
-        /// 
+        /// Stops all threads by setting the  _stopAllThreads flag to true and then waits for the logger threads to terminate
         /// </summary>
         internal void StopAllThreads()
         {
@@ -65,7 +63,7 @@ namespace ThreadLoggerDemo
         }
 
         /// <summary>
-        /// 
+        /// Waits for the logger threads to terminate
         /// </summary>
         internal void WaitForAllThreadsEnd()
         {
@@ -80,12 +78,12 @@ namespace ThreadLoggerDemo
         }
 
         /// <summary>
-        /// 
+        /// This is the method that is run by each of the logger threads.
+        /// The method loops 10 times and each time appends the entry to the log file.
+        /// The method calls the logger with the current thread id and the logger adds the entry counter and timestamp.
         /// </summary>
         private void LogEntriesThread()
         {
-            //Trace.WriteLine($"{DateTime.Now:HH:mm:ss.fff} -  STARTING Thread Name:{Thread.CurrentThread.Name}, Thread ID: {Thread.CurrentThread.ManagedThreadId}");
-
             for (int i = 0; i < 10; i++)
             {
                 // stop the theard
@@ -105,8 +103,6 @@ namespace ThreadLoggerDemo
                     break;
                 }
             }
-
-            //Trace.WriteLine($"{DateTime.Now:HH:mm:ss.fff} -  ENDING Thread Name:{Thread.CurrentThread.Name}, Thread ID: {Thread.CurrentThread.ManagedThreadId}");
         }
     }
 }
