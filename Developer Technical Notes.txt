@@ -1,0 +1,28 @@
+﻿Developer Technical Notes for TheardLoggerDemo
+
+Description
+-----------
+The application TheardLoggerDemo initializes the log file /log/out.txt and and writes lines to it concurrently using 10 threads.
+Each thread writes 10 entries to the log file
+The threads access the log file and a log file entry counter.   
+    
+Access to those two is synchronized using a lock to ensure thread-safe writing.    
+The main thread waits for all threads to finish before prompting the user to exit.
+    
+To avoid the application from crashing, Unhandled exception are caught in Program.cs->CurrentDomainUnhandledException() which:
+    A) Display an error message to the user.
+    B) Terminate any running threads.
+    C) Properly exits the application.
+
+Design Notes
+------------
+Choice of creating and starting threads instead of Parallel.Invoke 
+- gets the threads started and running without any delays
+- The threads all start within 1 millisecond of each other.
+
+Choice of using threads instead of tasks 
+- workload is light and threads are far more lightweight than tasks.
+- there is only need for thread synchronized when exiting the application, no need for the additional functionality tasks have.
+
+
+
