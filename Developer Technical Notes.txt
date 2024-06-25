@@ -1,6 +1,6 @@
 ﻿Description
 -----------
-The application TheardLoggerDemo initializes the log file /log/out.txt and and writes lines to it concurrently using 10 threads.
+TheardLoggerDemo is a C# console application that initializes the log file /log/out.txt and and writes lines to it concurrently using 10 threads.
 Each thread writes 10 entries to the log file
 The threads access the log file and a log file entry counter.   
     
@@ -31,7 +31,7 @@ When running the application in the container, the Hosts local time does not mat
 
 Build Tools
 -----------
-Application built with Visual Studio 2022 with Container Support component.
+Application built with Visual Studio 2022 with .NET 6.0 and Container Support component.
 Docker Desktop
 
 
