@@ -1,6 +1,4 @@
-﻿Developer Technical Notes for TheardLoggerDemo
-
-Description
+﻿Description
 -----------
 The application TheardLoggerDemo initializes the log file /log/out.txt and and writes lines to it concurrently using 10 threads.
 Each thread writes 10 entries to the log file
@@ -14,6 +12,7 @@ To avoid the application from crashing, Unhandled exception are caught in Progra
     B) Terminate any running threads.
     C) Properly exits the application.
 
+
 Design Notes
 ------------
 Choice of creating and starting threads instead of Parallel.Invoke 
@@ -23,6 +22,32 @@ Choice of creating and starting threads instead of Parallel.Invoke
 Choice of using threads instead of tasks 
 - workload is light and threads are far more lightweight than tasks.
 - there is only need for thread synchronized when exiting the application, no need for the additional functionality tasks have.
+
+Outstanding Issues
+------------------
+When running the application in the container, the Hosts local time does not match the PC local time.
+
+
+
+Build Tools
+-----------
+Application built with Visual Studio 2022 with Container Support component.
+Docker Desktop
+
+
+Usage
+-----
+Build the container:
+    docker build -t jmaeir/threadloggerdemo .
+
+Push the container to Docker Hub
+    docker push jmaeir/threadloggerdemo
+    Docker Hub repository is jmaeir/threadloggerdemo
+    https://hub.docker.com/repositories/jmaeir
+
+Run the container:
+    docker run -i -v c:\junk:/log -v /etc/localtime:/etc/localtime:ro jmaeir/threadloggerdemo
+
 
 
 
